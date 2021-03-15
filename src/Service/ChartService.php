@@ -40,12 +40,15 @@ final class ChartService implements ChartServiceInterface
             return [];
         }
 
-        return ApiHelper::mapList(
-            static function (array $data): ArtistInfo {
-                return ArtistInfo::fromApi($data);
-            },
-            $response['artists']['artist']
-        );
+        return [
+            'links' => $response['artists']['@attr'],
+            'items' => ApiHelper::mapList(
+                static function (array $data): ArtistInfo {
+                    return ArtistInfo::fromApi($data);
+                },
+                $response['artists']['artist']
+            )
+        ];
     }
 
     public function getTopTags(int $limit = 50, int $page = 1): array
@@ -78,11 +81,14 @@ final class ChartService implements ChartServiceInterface
             return [];
         }
 
-        return ApiHelper::mapList(
-            static function (array $data): Song {
-                return Song::fromApi($data);
-            },
-            $response['tracks']['track']
-        );
+        return [
+            'links' => $response['tracks']['@attr'],
+            'items' => ApiHelper::mapList(
+                static function (array $data): Song {
+                    return Song::fromApi($data);
+                },
+                $response['tracks']['track']
+            )
+        ];
     }
 }
